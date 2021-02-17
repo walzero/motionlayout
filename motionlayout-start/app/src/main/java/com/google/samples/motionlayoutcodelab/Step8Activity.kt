@@ -21,13 +21,17 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import com.google.android.material.appbar.AppBarLayout
+import com.google.samples.motionlayoutcodelab.databinding.ActivityStep8Binding
 
 class Step8Activity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityStep8Binding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_step8)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_step8)
 
         coordinateMotion()
     }
@@ -35,5 +39,11 @@ class Step8Activity : AppCompatActivity() {
     private fun coordinateMotion() {
         // TODO: set progress of MotionLayout based on an AppBarLayout.OnOffsetChangedListener
 
+        val listener = AppBarLayout.OnOffsetChangedListener { _, verticalOffset ->
+            val seekPosition = -verticalOffset / binding.appbarLayout.totalScrollRange.toFloat()
+            binding.motionLayout.progress = seekPosition
+        }
+
+        binding.appbarLayout.addOnOffsetChangedListener(listener)
     }
 }
